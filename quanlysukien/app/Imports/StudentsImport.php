@@ -4,11 +4,10 @@
 namespace App\Imports;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\OnEachRow;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Row;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
+use Maatwebsite\Excel\Row;
 
 class StudentsImport implements OnEachRow, WithHeadingRow, SkipsEmptyRows
 {
@@ -22,7 +21,7 @@ class StudentsImport implements OnEachRow, WithHeadingRow, SkipsEmptyRows
     {
         $this->total++;
 
-        // Lấy hàng với key là tiêu đề → chuẩn hóa: trim & toString
+        // Lấy dữ liệu, loại bỏ khoảng trắng
         $raw = $row->toArray();
         $r = [];
         foreach ($raw as $k => $v) {
@@ -31,47 +30,59 @@ class StudentsImport implements OnEachRow, WithHeadingRow, SkipsEmptyRows
             $r[$key] = $val;
         }
 
-        // Map các cột
-        $username  = $r['masv']  ?? $r['MaSv']  ?? $r['MASV']  ?? null;
-        $full_name = $r['hoten'] ?? $r['HoTen'] ?? $r['HOTEN'] ?? null;
-        $email     = $r['email'] ?? $r['Email'] ?? $r['EMAIL'] ?? null;
-        $phone     = $r['sdt']   ?? $r['phone'] ?? $r['Phone'] ?? $r['SDT'] ?? null;
-        $class     = $r['lop']   ?? $r['Lop']   ?? $r['LOP']   ?? null;
-        $faculty   = $r['khoa']  ?? $r['Khoa']  ?? $r['KHOA']  ?? null;
+        // Map các cột (đảm bảo đọc đúng tên cột trong file Excel)
+        $username   = $r['masv']       ?? $r['MaSv']       ?? $r['MASV']       ?? null;
+        $full_name  = $r['hoten']      ?? $r['HoTen']      ?? $r['HOTEN']      ?? null;
+        $email      = $r['email']      ?? $r['Email']      ?? $r['EMAIL']      ?? null;
+        $phone      = $r['sdt']        ?? $r['phone']      ?? $r['Phone']      ?? $r['SDT'] ?? null;
+        $class      = $r['lop']        ?? $r['Lop']        ?? $r['LOP']        ?? null;
+        $faculty    = $r['khoa']       ?? $r['Khoa']       ?? $r['KHOA']       ?? null;
+        $gender     = $r['gioitinh']   ?? $r['GioiTinh']   ?? $r['GIOITINH']   ?? null; // ✅ Thêm cột giới tính
 
-
-
-        // Nếu cả hàng trống → bỏ qua không tính lỗi
-        if (!$username && !$full_name && !$email && !$phone && !$class && !$faculty) {
+        // Nếu cả hàng trống → bỏ qua
+        if (!$username && !$full_name && !$email && !$phone && !$class && !$faculty && !$gender) {
             $this->skipped++;
             return;
         }
 
-        // Kiểm tra tối thiểu
+        // Kiểm tra dữ liệu bắt buộc
         if (!$username || !$full_name) {
             $this->skipped++;
             $this->errors[] = "Dòng {$row->getIndex()}: thiếu 'username' hoặc 'full_name'.";
             return;
         }
 
-        // Chuẩn hóa phone thành chuỗi không khoảng trắng
+        // Chuẩn hóa giới tính
+        if ($gender !== null) {
+            $gender = strtolower($gender);
+            if (in_array($gender, ['nam', 'male', 'm'])) {
+                $gender = 'Nam';
+            } elseif (in_array($gender, ['nữ', 'nu', 'female', 'f'])) {
+                $gender = 'Nữ';
+            } else {
+                $gender = ucfirst($gender);
+            }
+        }
+
+        // Chuẩn hóa số điện thoại
         if ($phone !== null) {
             $phone = preg_replace('/\s+/', '', (string)$phone);
         }
 
-        // Xác định có tồn tại chưa
+        // Kiểm tra tồn tại
         $exists = DB::table('users')->where('username', $username)->exists();
 
         try {
             if ($exists) {
-                // Cập nhật (không đụng password & role)
+                // Cập nhật
                 DB::table('users')->where('username', $username)->update([
                     'full_name'  => $full_name,
                     'email'      => $email ?: null,
                     'phone'      => $phone ?: null,
                     'class'      => $class ?: null,
                     'faculty'    => $faculty ?: null,
-                    // 'updated_at' => now(), // nếu có cột này
+                    'gender'     => $gender ?: null, // ✅ cập nhật giới tính
+                    // 'updated_at' => now(),
                 ]);
                 $this->updated++;
             } else {
@@ -84,6 +95,7 @@ class StudentsImport implements OnEachRow, WithHeadingRow, SkipsEmptyRows
                     'phone'      => $phone ?: null,
                     'class'      => $class ?: null,
                     'faculty'    => $faculty ?: null,
+                    'gender'     => $gender ?: null, // ✅ thêm giới tính khi insert
                     'role'       => 'student',
                     'created_at' => now(),
                 ]);
@@ -95,24 +107,9 @@ class StudentsImport implements OnEachRow, WithHeadingRow, SkipsEmptyRows
         }
     }
 
-    public function getTotal()
-    {
-        return $this->total;
-    }
-    public function getInserted()
-    {
-        return $this->inserted;
-    }
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-    public function getSkipped()
-    {
-        return $this->skipped;
-    }
-    public function getErrors()
-    {
-        return $this->errors;
-    }
+    public function getTotal()     { return $this->total; }
+    public function getInserted()  { return $this->inserted; }
+    public function getUpdated()   { return $this->updated; }
+    public function getSkipped()   { return $this->skipped; }
+    public function getErrors()    { return $this->errors; }
 }

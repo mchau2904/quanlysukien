@@ -7,7 +7,7 @@
 {{-- ========== Sự kiện đang diễn ra ========== --}}
 <div class="px-5 pt-4">
     {{-- 🔍 Form tìm kiếm sự kiện --}}
-    <div class="px-5 pt-4 text-center">
+    <div class="pt-4 text-center">
         <form method="GET" action="{{ route('home') }}" class="search-form mx-auto">
             <div class="input-group input-group-lg shadow-sm" style="max-width: 600px; border-radius: 50px; overflow: hidden;">
                 <span class="input-group-text bg-white border-0 ps-4">
@@ -20,9 +20,12 @@
                     class="form-control border-0 fs-6"
                     placeholder="Nhập tên sự kiện bạn muốn tìm..."
                     style="box-shadow: none;">
-                <button class="btn btn-primary px-4" type="submit" style="border-radius: 0 50px 50px 0;">
+               <button class="btn btn-primary px-4" type="submit" 
+                        style="border-radius: 0 50px 50px 0; font-size: 16px;">
                     Tìm kiếm
                 </button>
+
+
             </div>
 
             @if(request('q'))
@@ -47,7 +50,7 @@
                     src="{{ $e->image_url ?: 'https://picsum.photos/seed/ongoing' . $e->event_id . '/400/220' }}"
                     class="card-img-top"
                     alt="Ảnh sự kiện {{ $e->event_name }}"
-                    style="object-fit: cover; height: 220px;">
+                    style="object-fit: cover;">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title fw-semibold mb-2">{{ $e->event_name }}</h5>
                     <p class="text-muted mb-2">
@@ -85,7 +88,7 @@
                     src="{{ $e->image_url ?: 'https://picsum.photos/seed/ongoing' . $e->event_id . '/400/220' }}"
                     class="card-img-top"
                     alt="Ảnh sự kiện {{ $e->event_name }}"
-                    style="object-fit: cover; height: 220px;">
+                    style="object-fit: cover;">
 
 
                 <div class="card-body d-flex flex-column">

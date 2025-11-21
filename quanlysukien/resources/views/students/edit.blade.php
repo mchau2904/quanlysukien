@@ -153,7 +153,7 @@ h4.mb-3 {
                 <select name="faculty" id="faculty" class="form-select @error('faculty') is-invalid @enderror" required>
                     <option value="">-- Chọn khoa --</option>
                     @foreach ([
-                    'Công nghệ thông tin',
+                    'Công nghệ thông tin & Kinh tế số',
                     'Kế toán',
                     'Ngân hàng',
                     'Tài chính',

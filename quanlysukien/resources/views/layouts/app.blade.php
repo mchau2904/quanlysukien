@@ -12,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="icon" type="image/png" href="{{ asset('img/logo.jpg') }}">
     @stack('styles')
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
 
 
 </head>
@@ -20,7 +21,7 @@
     @include('template.header')
 
     <main class="flex-grow-1">
-        <div class="container py-4">
+        <div class="main-content ">
             <div class="page-narrow mx-auto">
 
                 {{-- ⚠️ Hiển thị thông báo flash (status / error) --}}
@@ -61,3 +62,38 @@ window.firebaseConfig = {
   measurementId: "G-4Z1YR66324"
 };
 </script>
+<style>
+    /* Màu nền tổng thể nhẹ nhàng */
+    body {
+        background-color: #f8f9fa;
+    }
+
+    /* Header đậm hơn */
+    header.navbar,
+    .site-header {
+        background: linear-gradient(90deg, #004080, #0059b3);
+        color: white;
+    }
+
+    /* Vùng main nhạt hơn */
+    main {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+
+    /* Footer đậm cùng tông với header */
+    footer.site-footer {
+        background: linear-gradient(90deg, #003366, #004c99);
+        color: #f0f0f0;
+        padding: 16px 0;
+        text-align: center;
+    }
+
+    footer.site-footer a {
+
+        color: #ffffff;
+        text-decoration: underline;
+    }
+</style>

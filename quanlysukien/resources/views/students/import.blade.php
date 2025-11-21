@@ -75,10 +75,10 @@
         <div class="card-body p-4">
             <div class="alert alert-info mb-3">
                 <div class="fw-semibold mb-2">📘 Định dạng file (.xlsx/.xls) – có dòng tiêu đề:</div>
-                <pre class="mb-2 mono">MaSv, full_name, email, phone, class, faculty</pre>
+                <pre class="mb-2 mono">Mã sinh viên, Họ tên, email, số điện thoại, khoa, giới tính</pre>
                 <div class="small mb-3">
-                    • <b>MaSv</b>: Mã sinh viên (bắt buộc, duy nhất). <br>
-                    • <b>full_name</b>: Họ tên sinh viên. <br>
+                    • <b></b>Mã sinh viên (bắt buộc, duy nhất). <br>
+                   
                     • Các cột khác có thể để trống nếu chưa có dữ liệu.<br>
                     • Tài khoản mới sẽ có mật khẩu mặc định: <code>12345678</code>.
                 </div>

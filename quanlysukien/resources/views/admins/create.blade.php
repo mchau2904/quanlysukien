@@ -4,7 +4,11 @@
 @section('content')
 <div class="container mt-4" style="max-width:700px;">
     <h4 class="fw-bold mb-3">➕ Thêm cán bộ</h4>
-
+    @foreach($errors->all() as $error)
+            <div class="alert alert-danger">
+            {{$error}}
+            </div>
+    @endforeach
     <form action="{{ route('admins.store') }}" method="POST" class="card p-4 shadow-sm">
         @csrf
         <div class="row mb-3">

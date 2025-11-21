@@ -4,7 +4,7 @@
 @section('content')
 <div class="page-wrapper d-flex flex-column min-vh-100">
     <main>
-        <div class="container-fluid px-5 pt-5">
+        <div class="container px-5 pt-5">
             {{-- 🔹 Header --}}
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
                 <h3 class="fw-bold text-primary mb-0">
@@ -168,6 +168,15 @@ body {
     font-family: "Inter", system-ui, sans-serif;
 }
 
+
+    /* .table>thead {
+        vertical-align: middle;
+    }
+
+    .table>thead tr th{
+        vertical-align: middle;
+        text-align: center
+    } */
 /* 📘 Header chính */
 h3.fw-bold {
     font-weight: 700;

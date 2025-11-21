@@ -36,6 +36,19 @@
     </div>
 </footer>
 
-<div class="scroll-to-top">
+<div class="scroll-to-top" id="scrollToTop" title="Lên đầu trang">
     <i class="fas fa-arrow-up"></i>
 </div>
+<script>
+    // Lấy nút
+    const scrollBtn = document.getElementById("scrollToTop");
+
+    // Khi bấm → cuộn mượt lên đầu
+    scrollBtn.addEventListener("click", () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
+
+</script>

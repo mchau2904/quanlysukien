@@ -5,7 +5,7 @@
 
 {{-- ADMIN VIEW --}}
 @if(auth()->user()?->role === 'admin')
-<div class="container-fluid px-4 pt-4">
+<div class="container px-4 pt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="fw-bold text-primary m-0"><i class="bi bi-calendar-event me-2"></i>Quản lý Sự kiện</h4>
         <a href="{{ route('events.create') }}" class="btn btn-gradient rounded-pill">
@@ -121,7 +121,7 @@
                                     {{-- Nút huy động / badge --}}
                                     @if($status === 'upcoming')
                                     @if(!$e->is_recruiting)
-                                    <form action="{{ route('events.recruit', $e->event_id) }}" method="POST" class="d-inline">
+                                    <form action="{{ route('events.recruit', $e->event_id) }}" method="POST" class="w-100">
                                         @csrf
                                         <button type="submit" class="btn btn-sm btn-success"
                                             onclick="return confirm('📢 Gửi huy động tham gia sự kiện {{ $e->event_name }} đến sinh viên?')">
@@ -155,11 +155,11 @@
 
 @else
 {{-- STUDENT VIEW --}}
-<div class="d-flex justify-content-between align-items-center my-4 px-5">
+<div class="container d-flex justify-content-between align-items-center my-4 px-5">
     <h3 class="fw-bold text-primary"><i class="bi bi-calendar-event me-2"></i>Danh sách Sự kiện</h3>
 </div>
 
-<div class="card p-4 mb-5 px-5">
+<div class="card p-4 mb-5 px-5 container">
     <ul class="nav nav-tabs mb-3" role="tablist">
         <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-ongoing">Đang diễn ra</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-upcoming">Sắp diễn ra</button></li>
@@ -180,7 +180,7 @@
                             src="{{ $e->image_url ?: 'https://picsum.photos/seed/ongoing' . $e->event_id . '/400/220' }}"
                             class="card-img-top"
                             alt="Ảnh sự kiện {{ $e->event_name }}"
-                            style="object-fit: cover; height: 220px;">
+                            style="object-fit: cover;">
                         <div class="card-body d-flex flex-column">
                             <h5 class="fw-bold mb-2 text-dark">{{ $e->event_name }}</h5>
                             <p class="text-muted mb-1">
@@ -220,7 +220,7 @@
                             src="{{ $e->image_url ?: 'https://picsum.photos/seed/ongoing' . $e->event_id . '/400/220' }}"
                             class="card-img-top"
                             alt="Ảnh sự kiện {{ $e->event_name }}"
-                            style="object-fit: cover; height: 220px;">
+                            style="object-fit: cover;">
                         <div class="card-body d-flex flex-column">
                             <h5 class="fw-bold mb-2 text-dark">{{ $e->event_name }}</h5>
                             <p class="text-muted mb-1">
@@ -252,6 +252,15 @@
         background: linear-gradient(90deg, #3b82f6, #6366f1);
         color: #fff;
         border: none
+    }
+
+    .table>thead {
+        vertical-align: middle;
+    }
+
+    .table>thead tr th{
+        vertical-align: middle;
+        text-align: center
     }
 
     .btn-gradient:hover {

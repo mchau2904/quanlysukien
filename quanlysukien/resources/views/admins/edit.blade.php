@@ -32,7 +32,7 @@
                 </select>
             </div>
             <div class="col-md-4">
-                <label class="form-label">Khoa</label>
+                <label class="form-label">Chức vụ</label>
                 <input type="text" name="faculty" class="form-control" value="{{ old('faculty', $admin->faculty) }}">
             </div>
         </div>

@@ -8,6 +8,15 @@ body {
     color: #1e293b;
 }
 
+.table>thead {
+    vertical-align: middle;
+}
+
+.table>thead tr th{
+    vertical-align: middle;
+    text-align: center
+}
+
 /* 🌈 Tiêu đề trang */
 h4.fw-bold {
     font-weight: 700;
@@ -63,7 +72,8 @@ form.d-flex button:hover {
     color: #fff;
 }
 .btn-success {
-    background: linear-gradient(135deg, #22c55e, #16a34a);
+    /* background: linear-gradient(135deg, #22c55e, #16a34a);s */
+    background: linear-gradient(90deg, #3b82f6, #6366f1);
     border: none;
     color: #fff;
     box-shadow: 0 2px 8px rgba(34, 197, 94, 0.25);
@@ -181,7 +191,7 @@ i.fa-solid {
 
 @section('content')
 <div class="container mt-4">
-    <h4 class="fw-bold mb-3">Danh sách Cán bộ (Admin)</h4>
+    <h4 class="fw-bold mb-3 text-primary">Danh sách Cán bộ (Admin)</h4>
 
     {{-- Thanh công cụ --}}
     <div class="d-flex justify-content-between align-items-center mb-3">

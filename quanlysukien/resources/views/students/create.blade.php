@@ -54,6 +54,7 @@
         font-weight: 600;
         font-size: .95rem;
         color: #0f172a;
+       margin-bottom: 0;
     }
 </style>
 @endpush
@@ -86,7 +87,7 @@
             <div class="card-body p-4">
                 <div class="row g-4">
                     <div class="col-12">
-                        <div class="section-title">Thông tin tài khoản</div>
+                        <div class="section-title" >Thông tin tài khoản</div>
                     </div>
 
                     {{-- MSSV (username) --}}
@@ -119,16 +120,26 @@
                     </div>
 
                     {{-- Ngày sinh --}}
-                    <div class="col-md-4">
+                    {{-- <div class="col-md-4">
                         <label for="dob" class="form-label mb-1">Ngày sinh</label>
                         <input type="date" name="dob" id="dob"
                             value="{{ old('dob') }}"
                             class="form-control @error('dob') is-invalid @enderror">
                         @error('dob')<div class="text-danger small">{{ $message }}</div>@enderror
+                    </div> --}}
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <input type="date" name="dob" id="dob"
+                                value="{{ old('dob') }}"
+                                class="form-control @error('dob') is-invalid @enderror"
+                                placeholder="Ngày sinh">
+                            <label for="dob">Ngày sinh</label>
+                            @error('dob')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
                     </div>
 
                     {{-- Giới tính --}}
-                    <div class="col-md-4">
+                    {{-- <div class="col-md-4">
                         <label for="gender" class="form-label mb-1">Giới tính</label>
                         <select name="gender" id="gender"
                             class="form-select @error('gender') is-invalid @enderror">
@@ -138,6 +149,19 @@
                             @endforeach
                         </select>
                         @error('gender')<div class="text-danger small">{{ $message }}</div>@enderror
+                    </div> --}}
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            <select name="gender" id="gender"
+                                class="form-select @error('gender') is-invalid @enderror">
+                                <option value="">-- Chọn --</option>
+                                @foreach (['Nam','Nữ','Khác'] as $g)
+                                <option value="{{ $g }}" {{ old('gender')===$g ? 'selected':'' }}>{{ $g }}</option>
+                                @endforeach
+                            </select>
+                            <label for="gender" class="form-label mb-1">Giới tính</label>
+                            @error('gender')<div class="text-danger small">{{ $message }}</div>@enderror
+                        </div>
                     </div>
 
                     {{-- SĐT --}}
@@ -179,28 +203,30 @@
                     {{-- Khoa --}}
                     {{-- Khoa --}}
                     <div class="col-12">
-                        <label for="faculty" class="form-label mb-1 required">Khoa</label>
-                        <select name="faculty" id="faculty"
-                            class="form-select @error('faculty') is-invalid @enderror" required>
-                            <option value="">-- Chọn khoa --</option>
-                            @foreach ([
-                            'Công nghệ thông tin',
-                            'Kế toán',
-                            'Ngân hàng',
-                            'Tài chính',
-                            'Chất lượng cao',
-                            'Khác',
-                            'Tất cả'
-                            ] as $facultyOption)
-                            <option value="{{ $facultyOption }}"
-                                {{ old('faculty') === $facultyOption ? 'selected' : '' }}>
-                                {{ $facultyOption }}
-                            </option>
-                            @endforeach
-                        </select>
-                        @error('faculty')
-                        <div class="text-danger small">{{ $message }}</div>
-                        @enderror
+                        <div class="form-floating">
+                            <select name="faculty" id="faculty"
+                                class="form-select @error('faculty') is-invalid @enderror" required>
+                                <option value="">-- Chọn khoa --</option>
+                                @foreach ([
+                                'Công nghệ thông tin & Kinh tế số',
+                                'Kế toán',
+                                'Ngân hàng',
+                                'Tài chính',
+                                'Chất lượng cao',
+                                'Khác',
+                                'Tất cả'
+                                ] as $facultyOption)
+                                <option value="{{ $facultyOption }}"
+                                    {{ old('faculty') === $facultyOption ? 'selected' : '' }}>
+                                    {{ $facultyOption }}
+                                </option>
+                                @endforeach
+                            </select>
+                            <label for="faculty" class="form-label mb-1 required">Khoa <span class="text-danger">*</span></label>
+                            @error('faculty')
+                            <div class="text-danger small">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
 

@@ -22,9 +22,44 @@
 
     .btn-gradient {
         background: linear-gradient(90deg, #3b82f6, #6366f1);
+        width: 100%;
+        max-width: 200px;
         color: #fff;
         border: none;
+        border-radius: 20px !important;
         transition: all 0.2s;
+        margin-bottom: 8px
+    }
+
+    .button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .button a {
+        text-decoration: none;
+        font-size: 12px;
+        color: #92999e;
+    }
+
+    .btn-custom {
+        border-radius: 30px;
+        padding: 6px 12px;
+        border: none;
+        cursor: pointer;
+        transition: 0.2s;
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .image-camera {
+        background-color: transparent;
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        border-radius: 20px
     }
 
     .btn-gradient:hover {
@@ -60,6 +95,7 @@
     .file-label {
         font-weight: 600;
         color: #444;
+        font-size: 12px;
         margin-bottom: 6px;
     }
 
@@ -76,6 +112,25 @@
     #result img {
         border-radius: 12px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-muteds {
+        font-size: 13px;
+        margin-bottom: 0px;
+    }
+
+    .upload-file {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center
+    }
+
+    .upload-file input[type="file"] {
+        border-radius: 12px;
+        width: 100%;
+        cursor: pointer;
+        max-width: 350px;
     }
 </style>
 
@@ -107,7 +162,7 @@
         @if(!empty($alreadyChecked) && $alreadyChecked)
         <div class="text-center py-4">
             <h4 class="fw-bold text-success mb-3">✅ Bạn đã điểm danh sự kiện này</h4>
-            <p class="text-muted mb-3">Hệ thống ghi nhận bạn đã có mặt. Cảm ơn bạn!</p>
+            <p class="text-muted text-muteds mb-3">Hệ thống ghi nhận bạn đã có mặt. Cảm ơn bạn!</p>
 
             @if(!empty($attendance->image_url))
             <img src="{{ $attendance->image_url }}" alt="Ảnh điểm danh" class="img-fluid rounded shadow-sm mb-3" style="max-height:250px;">
@@ -124,8 +179,8 @@
         {{-- ========================================= --}}
         @else
         <div class="text-center mb-4">
-            <h3 class="fw-bold text-primary mb-2">📸 Điểm danh bằng hình ảnh</h3>
-            <p class="text-muted">Hệ thống xác nhận danh tính qua ảnh hoặc camera thiết bị của bạn.</p>
+            <h3 class="fw-bold mb-2 text-primary header">Điểm danh bằng hình ảnh</h3>
+            <p class="text-muted text-muteds">Hệ thống xác nhận danh tính qua ảnh hoặc camera thiết bị của bạn.</p>
         </div>
 
         <form id="attendanceForm" enctype="multipart/form-data">
@@ -144,22 +199,27 @@
 
             <!-- NÚT CAMERA -->
             <div class="d-flex justify-content-center mb-4 gap-2 flex-wrap btn-group-custom">
-                <button type="button" id="startCamera" class="btn btn-outline-primary btn-sm px-3">🎥 Mở camera</button>
+                <button type="button" id="startCamera" class="btn btn-custom">
+                    <img src="{{ asset('img/camera3.jpg') }}" alt="Camera" class="image-camera">
+                </button>
                 <button type="button" id="captureBtn" class="btn btn-outline-success btn-sm px-3" style="display:none;">📸 Chụp ảnh</button>
                 <button type="button" id="retakeBtn" class="btn btn-outline-secondary btn-sm px-3" style="display:none;">🔁 Chụp lại</button>
             </div>
 
             <!-- UPLOAD FILE -->
-            <div class="mb-4">
-                <label for="photo" class="file-label">📁 Hoặc chọn ảnh từ thư viện</label>
+            <div class="mb-4 upload-file">
+                <label for="photo" class="file-label">Tải lên từ thư viện</label>
                 <input type="file" name="photo" id="photo" class="form-control" accept="image/*">
             </div>
 
             <!-- NÚT SUBMIT -->
-            <button type="submit" class="btn btn-gradient w-100 py-2">🚀 Gửi điểm danh</button>
-            <a href="{{ route('registrations.mine') }}" class="btn btn-outline-secondary w-100 py-2 mt-2">
-                ← Quay lại trang đăng ký
-            </a>
+            <div class="button">
+                <button type="submit" class="btn btn-gradient w-100 py-2">Gửi điểm danh</button>
+                <a href="{{ route('registrations.mine') }}">
+                    Quay lại trang đăng ký
+                </a>
+            </div>
+
         </form>
 
         <div id="result" class="mt-4 text-center"></div>
@@ -217,6 +277,8 @@
         preview.style.display = 'block';
         cameraStatus.textContent = 'Đã chụp ảnh';
 
+        document.getElementById('photo').value = "";
+
         // Tắt camera
         stream.getTracks().forEach(track => track.stop());
     });
@@ -227,6 +289,37 @@
         retakeBtn.style.display = 'none';
         startBtn.style.display = 'inline-block';
         cameraStatus.textContent = 'Camera chưa bật';
+
+        document.getElementById('photo').value = "";
+    });
+
+
+    // ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+    // ⭐ KHI UPLOAD ẢNH → CLEAR TOÀN BỘ CAMERA
+    // ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+    photo.addEventListener('change', () => {
+
+        // 1️⃣ Tắt camera nếu đang mở
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
+        }
+        video.srcObject = null;
+        video.style.display = 'none';
+
+        // 2️⃣ Xóa ảnh chụp trên canvas và preview
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        preview.src = "";
+        preview.style.display = 'none';
+
+        // 3️⃣ Reset lại trạng thái các nút camera
+        captureBtn.style.display = 'none';
+        retakeBtn.style.display = 'none';
+        startBtn.style.display = 'inline-block';
+
+        // 4️⃣ Cập nhật trạng thái
+        cameraStatus.textContent = 'Đang dùng ảnh tải lên';
     });
 
     // === 📤 GỬI FORM ===

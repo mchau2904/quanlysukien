@@ -28,3 +28,8 @@ attendance.php
     php artisan storage:link
 
     php artisan migrate --path=/database/migrations/2025_11_05_010655_add_target_fields_to_events_table.php
+
+
+deloy serve :
+- docker info
+- docker compose up -d --build

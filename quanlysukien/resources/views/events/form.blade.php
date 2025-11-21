@@ -6,6 +6,9 @@
 <style>
     body {
         background: #f8fafc;
+        max-width: 100%; 
+        height: auto;
+        display: block;
     }
 
     /* 🟦 Khối chính của form */
@@ -18,6 +21,8 @@
         max-width: 900px;
         border: 1px solid #eef2f7;
     }
+
+
 
     .page-header {
         border-radius: 14px;
@@ -112,6 +117,12 @@
     label.form-label {
         font-weight: 500;
         color: #475569;
+    }
+
+    .preview-image {
+        max-width: 100%; 
+        height: auto;
+        display: block;
     }
 </style>
 @endpush

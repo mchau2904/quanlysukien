@@ -82,7 +82,7 @@ class EventController extends Controller
 
     // ✅ Danh sách khoa cố định
     $faculties = [
-        'Công nghệ thông tin',
+        'Công nghệ thông tin & Kinh tế số',
         'Kế toán',
         'Ngân hàng',
         'Tài chính',
@@ -103,7 +103,6 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $data = $this->validated($request, null);
-
         // ✅ Xử lý upload ảnh
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('events', 'public');
@@ -119,12 +118,26 @@ class EventController extends Controller
         }
 
         // ✅ Tự sinh mã sự kiện nếu chưa nhập
-        $year  = now()->year;
+        $year = now()->year;
         $semester = strtoupper(str_replace(' ', '', $data['semester'] ?? ''));
+
         if (in_array($semester, ['HKI', 'HKII', 'HKHE'])) {
             $prefix = "{$year}{$semester}";
-            $count = Event::where('event_code', 'like', "{$prefix}%")->count() + 1;
-            $data['event_code'] = $prefix . str_pad($count, 3, '0', STR_PAD_LEFT);
+            
+           // Lấy mã lớn nhất theo prefix
+$latestCode = Event::where('event_code', 'like', "{$prefix}%")
+    ->orderBy('event_code', 'desc')
+    ->value('event_code');
+
+// Nếu chưa có mã nào → bắt đầu từ 001
+if (!$latestCode) {
+    $data['event_code'] = $prefix . '001';
+} else {
+    // Lấy 3 số cuối để tăng
+    $number = (int) substr($latestCode, strlen($prefix)) + 1;
+    $data['event_code'] = $prefix . str_pad($number, 3, '0', STR_PAD_LEFT);
+}
+
         }
 
         // ✅ Lưu sự kiện
@@ -172,7 +185,7 @@ class EventController extends Controller
         ->pluck('class');
 
     $faculties = [
-        'Công nghệ thông tin',
+        'Công nghệ thông tin & Kinh tế số',
         'Kế toán',
         'Ngân hàng',
         'Tài chính',
@@ -266,7 +279,6 @@ public function recruit(Event $event)
     if ($event->is_recruiting) {
         return back()->with('error', 'Sự kiện này đã được huy động trước đó.');
     }
-
     // ✅ Lọc sinh viên đúng đối tượng áp dụng
     $studentsQuery = DB::table('users')
         ->where('role', 'student')
@@ -285,7 +297,6 @@ public function recruit(Event $event)
     }
 
     $students = $studentsQuery->select('user_id', 'email', 'full_name')->get();
-
     // ✅ Kiểm tra trước khi cập nhật trạng thái
     if ($students->isEmpty()) {
         return back()->with('error', '❌ Không tìm thấy sinh viên phù hợp với đối tượng áp dụng. Sự kiện chưa được huy động.');

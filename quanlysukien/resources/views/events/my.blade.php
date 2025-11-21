@@ -8,6 +8,14 @@ body {
     color: #1e293b;
 }
 
+.table>thead {
+    vertical-align: middle;
+}
+
+.table>thead tr th{
+    vertical-align: middle;
+    text-align: center
+}
 /* 🌈 Tiêu đề trang */
 h4.fw-bold {
     font-weight: 700;

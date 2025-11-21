@@ -22,7 +22,7 @@ class EventRegistrationController extends Controller
     {
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('login.show')->with('error', 'Vui lòng đăng nhập.');
+            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập.');
         }
 
         if ($user->role !== 'student') {
@@ -96,7 +96,7 @@ class EventRegistrationController extends Controller
     {
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('login.show')->with('error', 'Vui lòng đăng nhập.');
+            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập.');
         }
 
         // 🔍 Lấy từ khóa tìm kiếm
@@ -124,7 +124,7 @@ class EventRegistrationController extends Controller
     {
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('login.show')->with('error', 'Vui lòng đăng nhập.');
+            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập.');
         }
 
         // Phải đăng ký rồi mới được điểm danh

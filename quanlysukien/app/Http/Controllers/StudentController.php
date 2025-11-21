@@ -81,10 +81,20 @@ class StudentController extends Controller
             'full_name' => 'required|string|max:100',
             'dob'       => 'nullable|date',
             'gender'    => 'nullable|in:Nam,Nữ,Khác',
-            'phone'     => 'nullable|string|max:15',
-            'email'     => 'nullable|email|max:100',
+            'phone'     => 'required|string|max:15|unique:users,phone',
+            'email'     => 'required|email|max:100|unique:users,email',
             'class'     => 'nullable|string|max:50',
             'faculty'   => 'nullable|string|max:100',
+        ], [
+        'username.required' => 'Bạn cần nhập MSS',
+        'username.unique' => 'MSSV này đã tồn tại.',
+        'email.email' => 'Email không hợp lệ.',
+        'phone.unique' => 'Số điện thoại này đã được sử dụng.',
+        'email.unique' => 'Email này đã được sử dụng.',
+        'phone.required' => 'Bạn cần nhập Số điện thoại.',
+        'email.required' => 'Bạn cần nhập Email.',
+        'full_name.required' => 'Bạn cần nhập Họ và tên.',
+        'faculty.required' => 'Bạn cần chọn khoa.',
         ]);
 
         DB::table('users')->insert([

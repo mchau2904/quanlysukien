@@ -15,9 +15,10 @@ use Illuminate\Support\Facades\Auth;
 class EvaluationController extends Controller
 {
     
-public function listEvents()
+public function listEvents(Request $request)
 {
     $now = \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString();
+    $q = trim((string) $request->get('q', ''));
 
     $events = DB::table('events')
         ->leftJoin('users', 'users.user_id', '=', 'events.manager_id')
@@ -46,6 +47,10 @@ public function listEvents()
                 END as status
             ")
         )
+        ->when($q, fn($q2) => $q2->where(function($w) use ($q) {
+            $w->where('events.event_code', 'like', "%$q%")
+            ->orWhere('events.event_name', 'like', "%$q%");
+        }))
         ->whereRaw('events.end_time < ?', [$now]) // chỉ lấy sự kiện đã kết thúc
         ->orderByRaw("
             CASE 
@@ -68,7 +73,7 @@ public function listEvents()
         ->orderByDesc('events.start_time')
         ->get();
 
-    return view('evaluation.list', compact('events'));
+    return view('evaluation.list', compact('events', 'q'));
 }
 
 

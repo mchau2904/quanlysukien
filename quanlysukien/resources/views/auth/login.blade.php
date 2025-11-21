@@ -1,4 +1,3 @@
-{{-- resources/views/auth/login.blade.php --}}
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -6,79 +5,77 @@
     <meta charset="utf-8">
     <title>Đăng nhập</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        :root {
-            --teal: #0f8b8d;
-            --teal-dark: #0c6f71;
-            --border: #e6e6e6;
-            --text: #333;
-            --bg: #f3f4f6;
-            --card: #fff;
-            --radius: 12px;
-        }
 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
         * {
             box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
 
         html, body {
             height: 100%;
+            margin: 0;
         }
 
         body {
-            margin: 0;
-            background: var(--bg);
-            color: var(--text);
-            font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans;
+            display: flex;
         }
 
-        .wrap {
-            min-height: 100dvh;
-            display: grid;
-            place-items: center;
-            padding: 24px;
+        /* Bên trái: ảnh + overlay */
+        .left {
+            flex: 1;
+            background: url("{{ asset('img/login.jpg') }}"); /* đổi path ảnh tại đây */
+            background-size: 100%;
+            background-position: center;
         }
 
-        .card {
+        /* Bên phải: form đăng nhập */
+        .right {
+            flex: 0.45;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            padding: 40px;
+        }
+
+        .form-container {
             width: 100%;
-            max-width: 420px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            box-shadow: 0 10px 24px rgba(0, 0, 0, .06);
-            overflow: hidden;
+            max-width: 360px;
         }
 
-        .header-title {
-            text-align: center;
+        h2 {
+            font-size: 28px;
             font-weight: 700;
-            font-size: 18px;
-            color: var(--teal);
-            border-bottom: 1px solid var(--border);
-            padding: 20px;
-        }
-
-        .card-body {
-            padding: 20px;
+            margin-bottom: 30px;
+            color: #222;
         }
 
         .field {
-            margin-top: 14px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #555;
         }
 
         .input {
             width: 100%;
-            height: 44px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 0 12px;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
             font-size: 14px;
-            background: #fff;
-            color: var(--text);
+            outline: none;
+            color: #333;
         }
 
         .input::placeholder {
-            color: #9ca3af;
+            color: #bbb;
         }
 
         .captcha-box {
@@ -86,7 +83,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px dashed var(--border);
+            border: 1px dashed #ddd;
             border-radius: 8px;
             font-weight: 700;
             letter-spacing: 10px;
@@ -96,63 +93,71 @@
         }
 
         .captcha-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
+            text-align: right;
             margin-top: 6px;
+        }
+
+        .captcha-actions button {
+            background: none;
+            border: none;
+            color: #a243ff;
+            font-size: 13px;
+            cursor: pointer;
         }
 
         .btn {
             width: 100%;
-            height: 44px;
+            padding: 12px;
             border: none;
-            border-radius: 8px;
-            margin-top: 16px;
-            background: var(--teal);
+            border-radius: 25px;
+            background: linear-gradient(90deg, #ff4fd8, #a243ff);
             color: #fff;
-            font-weight: 700;
+            font-weight: 600;
             font-size: 15px;
             cursor: pointer;
+            transition: opacity 0.3s ease;
         }
 
         .btn:hover {
-            background: var(--teal-dark);
+            opacity: 0.9;
         }
 
         .error {
             color: #b91c1c;
             font-size: 12px;
-            margin-top: 6px;
+            margin-top: 4px;
         }
 
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
+        .footer-note {
+            text-align: right;
+            font-size: 14px;
+            color: #555;
+            margin-top: 15px;
+        }
+
+        .footer-note a {
+            color: #555;
+            text-decoration: none;
+            font-weight: 500;
         }
     </style>
 </head>
 
 <body>
-    <div class="wrap">
-        <form class="card" method="POST" action="{{ route('login.do') }}" id="loginForm">
-            @csrf
+    <div class="left"></div>
 
-            {{-- Tiêu đề --}}
-            <div class="header-title">Cổng thông tin đào tạo</div>
+    <div class="right">
+        <div class="form-container">
+            <h2>Đăng nhập</h2>
 
-            <div class="card-body">
+            <form method="POST" action="{{ route('login.do') }}" id="loginForm">
+                @csrf
+
                 {{-- Username --}}
                 <div class="field">
-                    <label class="sr-only" for="username">Tên đăng nhập</label>
-                    <input class="input" id="username" name="username" type="text" placeholder="Tên đăng nhập"
-                        value="{{ old('username') }}" required>
+                    <label for="username">Tên đăng nhập</label>
+                    <input class="input" id="username" name="username" type="text" style="padding-left: 10px; border-radius: 8px;"
+                           placeholder="Tên đăng nhập..." value="{{ old('username') }}" required>
                     @error('username')
                         <div class="error">{{ $message }}</div>
                     @enderror
@@ -160,8 +165,9 @@
 
                 {{-- Password --}}
                 <div class="field">
-                    <label class="sr-only" for="password">Mật khẩu</label>
-                    <input class="input" id="password" name="password" type="password" placeholder="Mật khẩu" required>
+                    <label for="password">Mật khẩu</label>
+                    <input class="input" id="password" name="password" type="password"
+                           placeholder="************" style="padding-left: 10px; border-radius: 8px;" required>
                     @error('password')
                         <div class="error">{{ $message }}</div>
                     @enderror
@@ -169,17 +175,15 @@
 
                 {{-- Captcha --}}
                 <div class="field">
+                    <label>Mã bảo vệ</label>
                     <div id="text-captcha-box" class="captcha-box">
                         {{ isset($captchaCode) ? implode(' ', str_split($captchaCode)) : '' }}
                     </div>
                     <div class="captcha-actions">
-                        <button type="button" id="refreshTextCaptcha"
-                            style="background:none;border:none;color:#0f8b8d;cursor:pointer;font-size:13px">
-                            Tải mã mới
-                        </button>
+                        <button type="button" id="refreshTextCaptcha">Tải mã mới</button>
                     </div>
-                    <input class="input" type="text" name="captcha" id="captchaInput" placeholder="Nhập mã bảo vệ"
-                        autocomplete="off" required>
+                    <input class="input" type="text" name="captcha" id="captchaInput"
+                           placeholder="Nhập mã bảo vệ..." autocomplete="off" required>
                     @error('captcha')
                         <div class="error">{{ $message }}</div>
                     @enderror
@@ -191,12 +195,13 @@
                 @endif
 
                 <button type="submit" class="btn">Đăng nhập</button>
-            </div>
-        </form>
+            </form>
+
+         
+        </div>
     </div>
 
     <script>
-        // Nút "Tải mã mới" -> gọi route refresh để sinh mã mới trong session
         document.getElementById('refreshTextCaptcha').addEventListener('click', async () => {
             try {
                 const res = await fetch("{{ route('captcha.refresh') }}", {

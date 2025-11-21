@@ -3,6 +3,15 @@
 
 @section('content')
 <style>
+
+    .table>thead {
+    vertical-align: middle;
+}
+
+.table>thead tr th{
+    vertical-align: middle;
+    text-align: center
+}
     #attendanceChart {
         max-width: 420px;
         max-height: 420px;

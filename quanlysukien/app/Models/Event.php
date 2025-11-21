@@ -35,8 +35,6 @@ class Event extends Model
         'target_faculty',
         'target_class',
         'target_gender',
-
-
     ];
 
     // ⚠️ QUAN TRỌNG: cast về datetime để dùng ->format()

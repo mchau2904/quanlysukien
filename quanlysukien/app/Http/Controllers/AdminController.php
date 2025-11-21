@@ -51,15 +51,22 @@ class AdminController extends Controller
     // ✅ Lưu cán bộ mới
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = $request->validate([
             'username' => 'required|string|max:50|unique:users,username',
             'full_name' => 'required|string|max:255',
             'email' => 'nullable|email|unique:users,email',
             'phone' => 'nullable|string|max:20',
         ], [
-            'username.unique' => 'Tên đăng nhập đã tồn tại.',
+            'username.unique' => 'Trùng mã cán bộ.',
             'email.unique' => 'Email đã tồn tại.',
         ]);
+
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'status' => 0,
+        //         'errors' => $validator->errors()
+        //     ], 422);
+        // }     
 
         // ✅ Nếu không nhập mật khẩu → dùng mặc định 12345678
         $password = $request->input('password') ?: '12345678';

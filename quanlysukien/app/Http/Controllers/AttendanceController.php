@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class AttendanceController extends Controller
@@ -19,7 +20,7 @@ class AttendanceController extends Controller
     {
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('login.show')->with('error', 'Vui lòng đăng nhập.');
+            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập.');
         }
 
         $eventId = (int) $request->query('event_id');
@@ -83,7 +84,7 @@ class AttendanceController extends Controller
     {
         $user = Auth::user();
         if (!$user) {
-            return $this->fail($request, 'Vui lòng đăng nhập.', 401, route('login.show'));
+            return $this->fail($request, 'Vui lòng đăng nhập.', 401, route('login'));
         }
 
         // Validate
@@ -125,7 +126,7 @@ class AttendanceController extends Controller
             $allIps = gethostbynamel(gethostname());
             $clientIp = collect($allIps)->first(fn($ip) => preg_match('/^(192\.168\.|10\.|14\.|172\.)/', $ip)) ?? '127.0.0.1';
 
-            \Log::info('ATTENDANCE IP DEBUG', [
+            Log::info('ATTENDANCE IP DEBUG', [
                 'ip_request' => $request->ip(),
                 'ip_real'    => $clientIp,
                 'all_local_ips' => gethostbynamel(gethostname()) ?: [],
@@ -142,8 +143,11 @@ class AttendanceController extends Controller
             $timestamp = Carbon::now()->format('Ymd_His');
             $filename  = "{$user->user_id}_{$timestamp}." . $file->getClientOriginalExtension();
             $pathDir   = config('attendance.storage_folder', 'attendance') . "/user_{$user->user_id}";
+            // $stored    = $file->storeAs($pathDir, $filename, 'public');
+            // $imageUrl  = Storage::disk('public')->url($stored);
+
             $stored    = $file->storeAs($pathDir, $filename, 'public');
-            $imageUrl  = Storage::disk('public')->url($stored);
+            $imageUrl  = asset('storage/' . $stored);
 
             // Ghi DB (attendance_id là AUTO_INCREMENT)
             DB::table('attendance')->insert([

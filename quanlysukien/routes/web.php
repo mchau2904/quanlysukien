@@ -30,7 +30,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
 /* Auth (dùng LoginController — bỏ route login của UserController để tránh trùng) */
-Route::get('/login',  [LoginController::class, 'show'])->name('login.show');
+Route::get('/login',  [LoginController::class, 'show'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login.do');
 Route::get('/captcha/refresh', [LoginController::class, 'refreshCaptcha'])->name('captcha.refresh');
 
@@ -142,7 +142,7 @@ Route::middleware(['auth', 'role:student'])->group(function () {
         ->name('registrations.checkin')->whereNumber('event');
 });;
 Route::get('/students/import/sample', function () {
-    return response()->download(public_path('samples/test_import_excel.xlsx'));
+    return response()->download(public_path('samples/mau-upload-excel.xlsx'));
 })->name('students.import.sample');
 Route::get('/evaluations/{event_id}', [EvaluationController::class, 'show'])
     ->name('evaluations.show')
